@@ -33,9 +33,6 @@ class Tournament
 
     /**
      * Add a service tournament generator to the collection
-     * 
-     * @param ServiceInterface $service
-     * @return Tournament
      */
     public function addService(ServiceInterface $service): Tournament
     {
@@ -44,33 +41,21 @@ class Tournament
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getServices(): array
     {
         return $this->services->toArray();
     }
 
-    /**
-     * @return CarbonImmutable
-     */
     public function getDate(): CarbonImmutable
     {
         return $this->date;
     }
 
-    /**
-     * @return string
-     */
     public function getMode(): string
     {
         return $this->mode;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

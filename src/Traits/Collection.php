@@ -11,18 +11,23 @@ trait Collection
      */
     protected array $list = [];
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return $this->list;
     }
 
-    public function offsetGet($offset) {
-        return isset($this->list[$offset]) ? $this->list[$offset] : null;
+    /**
+     * 
+     */
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
+    {
+        return $this->list[$offset] ?? null;
     }
 
+    /**
+     * 
+     */
     public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
@@ -32,11 +37,17 @@ trait Collection
         }
     }
 
+    /**
+     * 
+     */
     public function offsetExists($offset): bool
     {
         return isset($this->list[$offset]);
     }
 
+    /**
+     * 
+     */
     public function offsetUnset($offset): void
     {
         unset($this->list[$offset]);
