@@ -4,7 +4,6 @@ use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Tournament;
 use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Services\CupService;
-use Tackacoder\Tournament\Services\ServicesCollection;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 
 beforeEach(function () {
@@ -33,23 +32,4 @@ it('can add generator services', function () {
         ->toBeArray()
         ->toContainOnlyInstancesOf(ServiceInterface::class)
         ->toHaveCount(2);
-});
-
-it('can use services collection as array', function () {
-    $collection = new ServicesCollection();
-    $collection[] = 'element';
-    $collection[] = 'element-2';
-
-    expect($collection->toArray())
-        ->toBeArray()
-        ->toHaveCount(2);
-    
-    expect($collection[0])->toBe('element');
-    expect($collection[1])->toBe('element-2');
-    expect(isset($collection[1]))->toBeTrue();
-    expect(isset($collection[2]))->toBeFalse();
-
-    unset($collection[0]);
-    expect($collection->toArray())
-        ->toHaveCount(1);
 });
