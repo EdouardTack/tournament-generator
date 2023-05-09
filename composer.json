@@ -1,0 +1,32 @@
+{
+    "name": "tackacoder/tournament",
+    "description": "Generate different tournaments with teams and schedule.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["tournament", "bracket", "schedule"],
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Tackacoder",
+            "email": "edouard.tack@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Tackacoder\\Tournament\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.1",
+        "nesbot/carbon": "^2.66"
+    },
+    "require-dev": {
+        "pestphp/pest": "^2.6",
+        "symfony/var-dumper": "^6.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
