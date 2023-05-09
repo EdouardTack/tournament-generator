@@ -1,0 +1,9 @@
+parameters:
+    checkGenericClassInNonGenericObjectType: false
+    paths:
+        - src/
+    level: 5
+    parallel:
+        jobSize: 15
+        maximumNumberOfProcesses: 25
+        minimumNumberOfJobsPerProcess: 2
