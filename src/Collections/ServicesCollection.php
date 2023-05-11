@@ -1,6 +1,6 @@
 <?php
 
-namespace Tackacoder\Tournament\Services;
+namespace Tackacoder\Tournament\Collections;
 
 use Tackacoder\Tournament\Contracts\AbstractCollection;
 

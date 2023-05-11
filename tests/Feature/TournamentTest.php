@@ -2,6 +2,7 @@
 
 use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Tournament;
+use Tackacoder\Tournament\Components\Team;
 use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Services\CupService;
 use Tackacoder\Tournament\Supports\ServiceInterface;
@@ -30,6 +31,45 @@ it('can add generator services', function () {
 
     expect($this->tournament->getServices())
         ->toBeArray()
+        ->toBeIterable()
         ->toContainOnlyInstancesOf(ServiceInterface::class)
         ->toHaveCount(2);
+});
+
+it('can define or add some teams', function () {
+    $teams = [
+        [
+            "name" => "Team One",
+            "status" => true
+        ],
+        [
+            "name" => "Team Two",
+            "status" => false
+        ],
+        [
+            "name" => "Team Three",
+            "status" => true
+        ],
+        [
+            "name" => "Team Four",
+            "status" => true
+        ]
+    ];
+
+    $this->tournament->setTeams($teams);
+
+    expect($this->tournament->getTeams())
+        ->toBeArray()
+        ->toContainOnlyInstancesOf(Team::class)
+        ->toHaveCount(4);
+
+    $this->tournament->addTeam([
+        "name" => "Team Five",
+        "status" => false
+    ]);
+
+    expect($this->tournament->getTeams())->toBeIterable();
+    
+    expect($this->tournament->getTeams())
+        ->toHaveCount(5);
 });

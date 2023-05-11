@@ -11,6 +11,16 @@ trait Collection
      */
     protected array $list = [];
 
+    public function define(array $list)
+    {
+        $this->list = $list;
+    }
+
+    public function set(mixed $value, $offset = null)
+    {
+        return $value;
+    }
+
     public function toArray(): array
     {
         return $this->list;
@@ -31,9 +41,9 @@ trait Collection
     public function offsetSet($offset, $value): void
     {
         if (is_null($offset)) {
-            $this->list[] = $value;
+            $this->list[] = $this->set($value, $offset);
         } else {
-            $this->list[$offset] = $value;
+            $this->list[$offset] = $this->set($value, $offset);
         }
     }
 

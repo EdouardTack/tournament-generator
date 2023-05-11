@@ -3,7 +3,8 @@
 namespace Tackacoder\Tournament;
 
 use Carbon\CarbonImmutable;
-use Tackacoder\Tournament\Services\ServicesCollection;
+use Tackacoder\Tournament\Collections\ServicesCollection;
+use Tackacoder\Tournament\Collections\TeamsCollection;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 use ReflectionClass;
 
@@ -23,12 +24,18 @@ class Tournament
     protected ServicesCollection $services;
 
     /**
+     * @var TeamsCollection
+     */
+    protected TeamsCollection $teams;
+
+    /**
      * @constructor
      */
     public function __construct(protected readonly string $name, protected readonly string $mode)
     {
         $this->date = CarbonImmutable::now();
         $this->services = new ServicesCollection();
+        $this->teams = new TeamsCollection();
     }
 
     /**
@@ -44,6 +51,25 @@ class Tournament
     public function getServices(): array
     {
         return $this->services->toArray();
+    }
+
+    public function setTeams(array $teams): Tournament
+    {
+        $this->teams->define($teams);
+
+        return $this;
+    }
+
+    public function addTeam(array $team): Tournament
+    {
+        $this->teams[] = $team;
+
+        return $this;
+    }
+
+    public function getTeams(): array
+    {
+        return $this->teams->toArray();
     }
 
     public function getDate(): CarbonImmutable
