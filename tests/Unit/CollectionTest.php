@@ -26,3 +26,15 @@ it('can use services collection as array', function () {
         ->toBeArray()
         ->toHaveCount(1);
 });
+
+it('can find a value into the collection', function() {
+    $collection = new ServicesCollection();
+    $championship = new \Tackacoder\Tournament\Services\ChampionshipService();
+    $collection->add($championship, $championship->getName());
+    $cup = new \Tackacoder\Tournament\Services\CupService();
+    $collection->add($cup, $cup->getName());
+
+    $result = $collection->find(['name' => 'championship']);
+    expect($result)
+        ->toBeInstanceOf(\Tackacoder\Tournament\Services\ChampionshipService::class);
+});

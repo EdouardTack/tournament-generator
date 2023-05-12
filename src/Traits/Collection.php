@@ -11,9 +11,19 @@ trait Collection
      */
     protected array $list = [];
 
+    /**
+     * @var array
+     */
+    protected array $finder;
+
     public function define(array $list)
     {
         $this->list = $list;
+    }
+
+    public function add($value, $key = null): void
+    {
+        $this->offsetSet($key, $value);
     }
 
     public function set(mixed $value, $offset = null)
@@ -24,6 +34,22 @@ trait Collection
     public function toArray(): array
     {
         return $this->list;
+    }
+
+    public function find(array $finder)
+    {
+        $this->finder = $finder;
+
+        return current(array_filter($this->list, function ($value, $key) {
+            foreach ($this->finder as $method => $find) {
+                $methodName = 'get' . ucfirst($method);
+                if (method_exists($value, $methodName)) {
+                    return call_user_func([$value, $methodName]) === $find;
+                }
+            }
+
+            return false;
+        }, ARRAY_FILTER_USE_BOTH));
     }
 
     /**

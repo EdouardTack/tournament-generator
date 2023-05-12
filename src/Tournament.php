@@ -5,6 +5,7 @@ namespace Tackacoder\Tournament;
 use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Collections\ServicesCollection;
 use Tackacoder\Tournament\Collections\TeamsCollection;
+use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 use ReflectionClass;
 
@@ -31,11 +32,26 @@ class Tournament
     /**
      * @constructor
      */
-    public function __construct(protected readonly string $name, protected readonly string $mode)
+    public function __construct(protected string $name, protected string $mode = 'championship')
     {
         $this->date = CarbonImmutable::now();
         $this->services = new ServicesCollection();
+        $this->services->add(new ChampionshipService());
         $this->teams = new TeamsCollection();
+    }
+
+    /**
+     * Generate the Service generate 
+     */
+    public function generate(): array
+    {
+        $service = $this->services->find(['name' => $this->mode]);
+
+        if (empty($service)) {
+            throw new \Exception("No service found for {$this->mode} !");
+        }
+
+        return $service->generate();
     }
 
     /**
@@ -43,7 +59,7 @@ class Tournament
      */
     public function addService(ServiceInterface $service): Tournament
     {
-        $this->services[(new ReflectionClass($service))->getShortName()] = $service;
+        $this->services->add($service, $service->getName());
 
         return $this;
     }
@@ -62,7 +78,7 @@ class Tournament
 
     public function addTeam(array $team): Tournament
     {
-        $this->teams[] = $team;
+        $this->teams->add($team);
 
         return $this;
     }
@@ -82,8 +98,22 @@ class Tournament
         return $this->mode;
     }
 
+    public function setMode(string $mode): Tournament
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setName(string $name): Tournament
+    {
+        $this->name = $name;
+
+        return $this;
     }
 }

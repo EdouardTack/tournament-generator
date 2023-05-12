@@ -25,7 +25,12 @@ class Team
         $this->name = $team['name'];
         $this->status = $team['status'] ?? false;
 
-        $this->uuid = substr(bin2hex(random_bytes(6)), 0, 15);
+        $this->uuid = substr(bin2hex(random_bytes(6)), 0, 16);
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
     }
 
     public function getName(): string
