@@ -4,6 +4,7 @@
     "type": "library",
     "license": "MIT",
     "keywords": ["tournament", "generator", "contests", "bracket", "schedule"],
+    "homepage": "https://github.com/EdouardTack/tournament-generator",
     "minimum-stability": "stable",
     "authors": [
         {

@@ -2,7 +2,7 @@
 
 ## Features
 
-- 
+- Create a simple round robin tournament with an even count teams
 
 ## Installation
 
@@ -56,7 +56,6 @@ $result = $tournament->generate();
 ### Create a generator service
 
 ```php
-
 use Tackacoder\Tournament\Services\Service;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 
@@ -79,6 +78,7 @@ class MyServiceService extends Service implements ServiceInterface
         return [];
     }
 }
+```
 
 ## Contributing 
 
