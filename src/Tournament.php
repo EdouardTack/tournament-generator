@@ -94,6 +94,7 @@ class Tournament
 
     public function getTeams(): array
     {
+        // @TODO change this to return collection
         return $this->teams->toArray();
     }
 

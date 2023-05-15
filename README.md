@@ -6,7 +6,7 @@
 
 ## Installation
 
-`$ composer require tackacoder/tournament-generator`
+`$ composer require tackacoder/tournament-services`
 
 ## Basic Usage
 
@@ -17,6 +17,26 @@ use Tackacoder\Tournament\Tournament;
 
 /**
  * Create a tournament
+ * 
+ * ` Tournament
+ *   - Tournament name
+ *   - Tournament Mode
+ *   - Tournament generate date
+ * 
+ * ` Teams
+ *   - List of teams
+ * 
+ * ` Matches
+ *   - Day name
+ * 
+ *   ` Schedules
+ *     - Schedule Date
+ * 
+ *     ` Matches
+ *       - Home Team
+ *       - Away Team
+ *       - Score
+ *       - Stats
  * 
  * TOURNAMENT_MODE is a service variable
  * By default, services are included :
@@ -78,6 +98,9 @@ class MyServiceService extends Service implements ServiceInterface
         return [];
     }
 }
+
+// In other file
+$tournament->setMode('my_service');
 ```
 
 ## Contributing 

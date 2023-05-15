@@ -1,5 +1,5 @@
 {
-    "name": "tackacoder/tournament-generator",
+    "name": "tackacoder/tournament-services",
     "description": "Generate different tournaments with teams and schedule.",
     "type": "library",
     "license": "MIT",
