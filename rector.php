@@ -21,6 +21,6 @@ return static function (RectorConfig $rectorConfig): void {
     // define sets of rules
     $rectorConfig->sets([
         SetList::CODE_QUALITY,
-        LevelSetList::UP_TO_PHP_82
+        LevelSetList::UP_TO_PHP_81
     ]);
 };
