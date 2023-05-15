@@ -9,7 +9,7 @@ interface ServiceInterface
      * 
      * @return array
      */
-    public function generate(): array;
+    public function generate(array $config): array;
 
     /**
      * Uses for finder collection

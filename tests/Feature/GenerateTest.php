@@ -1,12 +1,12 @@
 <?php
 
 use Tackacoder\Tournament\Tournament;
+use Tackacoder\Tournament\Components\Day;
 use Tackacoder\Tournament\Services\ChampionshipService;
-use Tackacoder\Tournament\Services\CupService;
 
 beforeEach(function () {
-    $this->tournament = new Tournament('Titre', 'championship');
-    $this->tournament->setTeams([
+    $this->generateTournament = new Tournament('Titre', 'championship');
+    $this->generateTournament->setTeams([
         [
             "name" => "Team One",
             "status" => true
@@ -27,15 +27,22 @@ beforeEach(function () {
 });
 
 it('throw Exception if no service with mode name found', function () {
-    $this->tournament->setMode('nothing');
-    $this->tournament->generate();
+    $this->generateTournament->setMode('nothing');
+    $this->generateTournament->generate();
 })->throws(Exception::class, "No service found for nothing !");
 
 test('Generate a new championship Tournament', function () {
-    $this->tournament->addService(new ChampionshipService());
-    $data = $this->tournament->generate();
+    $this->generateTournament->addService(new ChampionshipService());
+    $result = $this->generateTournament->generate();
 
-    // dump($data);
-    expect($data)
-        ->toBeArray();
+    expect($result)
+        ->toBeArray()
+        ->toMatchArray([
+            'name' => 'Titre',
+            'mode' => 'championship'
+        ]);
+
+    expect($result['generate'])
+        ->toBeArray()
+        ->toContainOnlyInstancesOf(Day::class);
 });

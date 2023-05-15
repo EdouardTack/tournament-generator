@@ -5,9 +5,9 @@ namespace Tackacoder\Tournament;
 use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Collections\ServicesCollection;
 use Tackacoder\Tournament\Collections\TeamsCollection;
+use Tackacoder\Tournament\Helpers\SerializerEncoder;
 use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Supports\ServiceInterface;
-use ReflectionClass;
 
 /**
  * 
@@ -32,18 +32,18 @@ class Tournament
     /**
      * @constructor
      */
-    public function __construct(protected string $name, protected string $mode = 'championship')
+    public function __construct(protected string $name, protected string $mode = 'championship', string $utc = 'UTC')
     {
-        $this->date = CarbonImmutable::now();
+        $this->date = CarbonImmutable::now()->setTimezone($utc);
         $this->services = new ServicesCollection();
-        $this->services->add(new ChampionshipService());
+        // $this->addService(new ChampionshipService());
         $this->teams = new TeamsCollection();
     }
 
     /**
      * Generate the Service generate 
      */
-    public function generate(): array
+    public function generate(bool $hasArray = false): array
     {
         $service = $this->services->find(['name' => $this->mode]);
 
@@ -51,7 +51,18 @@ class Tournament
             throw new \Exception("No service found for {$this->mode} !");
         }
 
-        return $service->generate();
+        $result = [
+            "name" => $this->getName(),
+            "mode" => $this->getMode(),
+            "date" => $this->getDate(),
+            "generate" => $service->generate([
+                "name" => $this->getName(),
+                "date" => $this->getDate(),
+                "teams" => $this->teams,
+            ])
+        ];
+
+        return $hasArray ? SerializerEncoder::toArray($result) : $result;
     }
 
     /**

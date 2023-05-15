@@ -8,7 +8,7 @@ class CupService implements ServiceInterface
 {
     protected string $name = 'cup';
 
-    public function generate(): array
+    public function generate(array $config): array
     {
         return [];
     }

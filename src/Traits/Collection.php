@@ -40,7 +40,7 @@ trait Collection
     {
         $this->finder = $finder;
 
-        return current(array_filter($this->list, function ($value, $key) {
+        return current(array_filter($this->list, function ($value) {
             foreach ($this->finder as $method => $find) {
                 $methodName = 'get' . ucfirst($method);
                 if (method_exists($value, $methodName)) {
@@ -49,7 +49,17 @@ trait Collection
             }
 
             return false;
-        }, ARRAY_FILTER_USE_BOTH));
+        }));
+    }
+
+    public function count(): int
+    {
+        return count($this->list);
+    }
+
+    public function map(Callable $callable)
+    {
+        return array_map($callable, $this->list);
     }
 
     /**
