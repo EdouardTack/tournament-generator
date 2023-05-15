@@ -102,27 +102,23 @@ class ChampionshipService extends Service implements ServiceInterface
 
     /**
      * Create round robin for a single matches between Teams
-     * 
-     * @return array
      */
     public function rounds(): array
     {
         $teamsId = $this->getConfig('teams')->map(fn (Team $team) => $team->getUuid());
         $countTeams = $this->getConfig('teams')->count();
 
-        // Si le nombre d'equipe n'est pas un nombre pair
+        // If the team number is not an even number
         // $ghost = false;
         // if ($countTeams % 2 == 1) {
         //     $countTeams++;
         //     $ghost = true;
         // }
         
-        // Défini le nombre de match par équipe
         $totalRounds = $countTeams - 1;
-        // Défini le nombre de match par journée
         $matchesPerRound = $countTeams / 2;
 
-        // Défini le nombre de tour de matchs
+        // Set the number of match rounds
         $rounds = [];
         for ($i = 0;$i < $totalRounds;$i++) {
             $rounds[$i] = [];
@@ -132,7 +128,7 @@ class ChampionshipService extends Service implements ServiceInterface
             for ($match = 0;$match < $matchesPerRound;$match++) {
                 $home = ($round + $match) % $totalRounds;
                 $away = ($totalRounds - $match + $round) % $totalRounds;
-                // Dernière équipe reste à la même place, les autres tournent autour de lui
+                // Last team remains in the same place, the others revolve around it
                 if ($match == 0) {
                     $away = $countTeams - 1;
                 }
@@ -143,7 +139,7 @@ class ChampionshipService extends Service implements ServiceInterface
             }
         }
 
-        // Interleave afin que les matchs à domicile et à l'extérieur soient assez uniformément dispersés
+        // Interleave so home and away games are pretty evenly spread out
         $interleaved = [];
         for ($i = 0;$i < $totalRounds;$i++) {
             $interleaved[$i] = [];
@@ -151,26 +147,21 @@ class ChampionshipService extends Service implements ServiceInterface
 
         $even = 0;
         $odd = ($countTeams / 2);
-        for ($i = 0;$i < count($rounds);$i++) {
-            if ($i % 2 == 0) {
-                $interleaved[$i] = $rounds[$even++];
-            } else {
-                $interleaved[$i] = $rounds[$odd++];
-            }
+        $roundsCount = count($rounds);
+        for ($i = 0;$i < $roundsCount;$i++) {
+            $interleaved[$i] = $i % 2 == 0 ? $rounds[$even++] : $rounds[$odd++];
         }
         $rounds = $interleaved;
-
-        // Dernière équipe ne peut pas être dernière durant chaque journée, donc on les retournes
-        for ($round = 0;$round < count($rounds);$round++) {
+        $roundsCount = count($rounds);
+        for ($round = 0;$round < $roundsCount;$round++) {
             if ($round % 2 == 1) {
                 $rounds[$round][0] = $this->flip($rounds[$round][0]);
             }
         }
 
-        // On mélange un peu chaque rounds dans le sens aller-retour
         foreach ($rounds as $match => $matches) {
             foreach ($matches as $key => $round) {
-                if (rand(0, 2) == 1) {
+                if (random_int(0, 2) == 1) {
                     $rounds[$match][$key] = $this->flip($round);
                 }
             }
@@ -186,10 +177,6 @@ class ChampionshipService extends Service implements ServiceInterface
 
     /**
      * On retourne les 2 équipes
-     *
-     * @param $match
-     *
-     * @return string
      */
     protected function flip(Contest $round): Contest
     {
@@ -201,17 +188,12 @@ class ChampionshipService extends Service implements ServiceInterface
 
     /**
      * On récupère le nom de l'équipe
-     *
-     * @param int
-     * @param array
-     *
-     * @return string
      */
-    protected function teamName(int $num, array $ids): string
+    protected function teamName(int $num, array $ids): string|int
     {
         $i = $num - 1;
-        if (count($ids) > $i && strlen(trim($ids[$i])) > 0) {
-            return trim($ids[$i]);
+        if (count($ids) > $i && strlen(trim((string) $ids[$i])) > 0) {
+            return trim((string) $ids[$i]);
         } else {
             return $num;
         }

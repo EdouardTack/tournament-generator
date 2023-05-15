@@ -16,26 +16,41 @@ trait Collection
      */
     protected array $finder;
 
+    /**
+     * Define the collection data
+     */
     public function define(array $list)
     {
         $this->list = $list;
     }
 
+    /**
+     * @see @offsetSet
+     */
     public function add($value, $key = null): void
     {
         $this->offsetSet($key, $value);
     }
 
-    public function set(mixed $value, $offset = null)
+    /**
+     * Callback to the set value
+     */
+    protected function set(mixed $value, $offset = null)
     {
         return $value;
     }
 
+    /**
+     * Returns results of the collection
+     */
     public function toArray(): array
     {
         return $this->list;
     }
 
+    /**
+     * Filters elements of the collection using a callback function
+     */
     public function find(array $finder)
     {
         $this->finder = $finder;
@@ -52,18 +67,25 @@ trait Collection
         }));
     }
 
+    /**
+     * Counts all elements in the collection
+     */
     public function count(): int
     {
         return count($this->list);
     }
 
+    /**
+     * Applies the callback to the elements of the collection
+     */
     public function map(Callable $callable)
     {
         return array_map($callable, $this->list);
     }
 
     /**
-     * 
+     * Returns the value at specified offset.
+     * This method is executed when checking if offset is empty().
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -72,7 +94,7 @@ trait Collection
     }
 
     /**
-     * 
+     * Assigns a value to the specified offset.
      */
     public function offsetSet($offset, $value): void
     {
@@ -84,7 +106,8 @@ trait Collection
     }
 
     /**
-     * 
+     * Whether or not an offset exists.
+     * This method is executed when using isset() or empty().
      */
     public function offsetExists($offset): bool
     {
@@ -92,7 +115,7 @@ trait Collection
     }
 
     /**
-     * 
+     * Unsets an offset.
      */
     public function offsetUnset($offset): void
     {

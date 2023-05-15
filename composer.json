@@ -1,9 +1,9 @@
 {
-    "name": "tackacoder/tournament",
+    "name": "tackacoder/tournament-generator",
     "description": "Generate different tournaments with teams and schedule.",
     "type": "library",
     "license": "MIT",
-    "keywords": ["tournament", "bracket", "schedule"],
+    "keywords": ["tournament", "generator", "contests", "bracket", "schedule"],
     "minimum-stability": "stable",
     "authors": [
         {
@@ -39,6 +39,6 @@
         "test-dirty": "@php ./vendor/bin/pest --dirty",
         "test-coverage": "@php ./vendor/bin/pest --coverage",
         "rector": "@php ./vendor/bin/rector --dry-run",
-        "phpstan": "@php ./vendor/bin/phpstan --dry-run"
+        "phpstan": "@php ./vendor/bin/phpstan"
     }
 }

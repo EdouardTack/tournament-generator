@@ -9,9 +9,6 @@ use Tackacoder\Tournament\Helpers\SerializerEncoder;
 use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 
-/**
- * 
- */
 class Tournament
 {
     /**
@@ -36,12 +33,13 @@ class Tournament
     {
         $this->date = CarbonImmutable::now()->setTimezone($utc);
         $this->services = new ServicesCollection();
+        // Do we include this service by default ?
         // $this->addService(new ChampionshipService());
         $this->teams = new TeamsCollection();
     }
 
     /**
-     * Generate the Service generate 
+     * Generate the Service generator method
      */
     public function generate(bool $hasArray = false): array
     {

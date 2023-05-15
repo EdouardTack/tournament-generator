@@ -16,7 +16,7 @@ class TeamsCollection extends AbstractCollection
         }
     }
 
-    public function set($value, $offset = null)
+    protected function set($value, $offset = null)
     {
         return new Team($value);
     }

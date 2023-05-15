@@ -9,6 +9,11 @@ class Service
      */
     protected array $config;
 
+    /**
+     * @var string
+     */
+    protected string $name = 'service';
+
     public function setConfig(array $config): Service
     {
         $this->config = $config;
@@ -23,5 +28,10 @@ class Service
         }
 
         return null;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }

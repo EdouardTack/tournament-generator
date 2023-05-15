@@ -17,4 +17,5 @@ class CupService extends Service implements ServiceInterface
     public function getName(): string
     {
         return $this->name;
-    }}
+    }
+}

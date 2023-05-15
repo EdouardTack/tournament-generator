@@ -11,7 +11,7 @@ class Schedule
 
     public function __construct(protected CarbonImmutable $date, array $contests = [])
     {
-        if (!empty($contests)) {
+        if ($contests !== []) {
             foreach ($contests as $contest) {
                 $this->addContest($contest);
             }
