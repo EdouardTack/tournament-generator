@@ -38,3 +38,12 @@ it('can find a value into the collection', function() {
     expect($result)
         ->toBeInstanceOf(\Tackacoder\Tournament\Services\ChampionshipService::class);
 });
+
+it('can not find a value into the collection', function () {
+    $collection = new ServicesCollection();
+    $championship = new \Tackacoder\Tournament\Services\ChampionshipService();
+    $collection->add($championship, $championship->getName());
+
+    expect($collection->find(['notExist' => 'championship']))
+        ->toBeFalse();
+});

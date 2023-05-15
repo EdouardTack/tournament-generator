@@ -24,6 +24,18 @@ it('can not change construct date', function () {
         ->not->toBe($this->tournament->getDate()->toDateTimeString());
 });
 
+it('can change name and mode after initialization', function () {
+    expect($this->tournament->getName())->toBe('Titre');
+    expect($this->tournament->getMode())->toBe('championship');
+
+    $this->tournament
+        ->setName('Edit')
+        ->setMode('bracket');
+
+    expect($this->tournament->getName())->toBe('Edit');
+    expect($this->tournament->getMode())->toBe('bracket');
+});
+
 it('can add generator services', function () {
     $this->tournament->addService(new ChampionshipService());
     $this->tournament->addService(new ChampionshipService());

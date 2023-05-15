@@ -216,5 +216,4 @@ class ChampionshipService extends Service implements ServiceInterface
             return $num;
         }
     }
-
 }

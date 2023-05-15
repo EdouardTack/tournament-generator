@@ -35,10 +35,10 @@
         }
     },
     "scripts": {
-        "test": "./vendor/bin/pest",
+        "test": "@php ./vendor/bin/pest",
         "test-dirty": "@php ./vendor/bin/pest --dirty",
-        "test-coverage": "./vendor/bin/pest --coverage",
-        "rector": "./vendor/bin/rector --dry-run",
-        "phpstan": "./vendor/bin/phpstan --dry-run"
+        "test-coverage": "@php ./vendor/bin/pest --coverage",
+        "rector": "@php ./vendor/bin/rector --dry-run",
+        "phpstan": "@php ./vendor/bin/phpstan --dry-run"
     }
 }
