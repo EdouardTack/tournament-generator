@@ -107,4 +107,4 @@ $tournament->setMode('my_service');
 
 ### Run Functional Tests
 
-`composer test` or `php vendor/bin/pest`
+`$ composer test` or `$ php vendor/bin/pest`

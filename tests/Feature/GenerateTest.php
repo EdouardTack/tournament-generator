@@ -32,8 +32,9 @@ it('throw Exception if no service with mode name found', function () {
 })->throws(Exception::class, "No service found for nothing !");
 
 test('Generate a new championship Tournament', function () {
-    $this->generateTournament->addService(new ChampionshipService());
-    $result = $this->generateTournament->generate();
+    $tournament = $this->generateTournament;
+    $tournament->addService(new ChampionshipService());
+    $result = $tournament->generate();
 
     expect($result)
         ->toBeArray()
@@ -45,4 +46,13 @@ test('Generate a new championship Tournament', function () {
     expect($result['generate'])
         ->toBeArray()
         ->toContainOnlyInstancesOf(Day::class);
+});
+
+test('Generate championship with closure function', function () {
+    $tournament = $this->generateTournament;
+    $tournament->addService(new ChampionshipService(callable: function ($args) {
+        return null;
+    }));
+    $tournament->generate();
+    expect($tournament->getServices()->find(['name' => 'championship'])->getCallable())->toBeCallable();
 });

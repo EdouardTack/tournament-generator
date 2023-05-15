@@ -73,9 +73,9 @@ class Tournament
         return $this;
     }
 
-    public function getServices(): array
+    public function getServices(): ServicesCollection
     {
-        return $this->services->toArray();
+        return $this->services;
     }
 
     public function setTeams(array $teams): Tournament
@@ -92,10 +92,9 @@ class Tournament
         return $this;
     }
 
-    public function getTeams(): array
+    public function getTeams(): TeamsCollection
     {
-        // @TODO change this to return collection
-        return $this->teams->toArray();
+        return $this->teams;
     }
 
     public function getDate(): CarbonImmutable
