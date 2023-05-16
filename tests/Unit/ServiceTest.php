@@ -20,7 +20,7 @@ it('initialize without config values', function () {
     expect($this->service->getConfig('unexptected'))->toBe(null);
 });
 
-it('set config values', function () {
+test('set/get config values', function () {
     $this->service->setConfig([
         'data' => 'string',
         'boolean' => true

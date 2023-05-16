@@ -107,7 +107,7 @@ class Tournament
             $this->date = $date;
         } else {
             $now = CarbonImmutable::now();
-            $this->date = CarbonImmutable::create($now->format('Y'), $now->format('m'), $now->format('d'), 20, 0, 0, $utc);
+            $this->date = CarbonImmutable::create((int) $now->format('Y'), (int) $now->format('m'), (int) $now->format('d'), 20, 0, 0, $utc);
         }
 
         return $this;

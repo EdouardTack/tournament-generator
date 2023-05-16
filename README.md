@@ -1,5 +1,7 @@
 # Tournament generator
 
+![php workflow](https://github.com/EdouardTack/tournament-generator/actions/workflows/php.yml/badge.svg)
+
 ## Features
 
 - Create a simple round robin tournament with an even count teams and home/away matches
@@ -79,9 +81,9 @@ $result = $tournament->generate();
 
 ### Championship Service Usage
 
-The Championship Service object can be construct with optionals parameters.
-    * interval : See [documentation](https://carbon.nesbot.com/docs/#api-interval)
-    * callable : Closure to send event on diffrent endpoint
+The Championship Service object can be construct with optionals parameters :
+* interval : See [documentation](https://carbon.nesbot.com/docs/#api-interval)
+* callable : Closure to send event on diffrent endpoint
 
 ```php
 new ChampionshipService('2 days', function ($args) {
