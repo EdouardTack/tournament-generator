@@ -2,6 +2,8 @@
 
 namespace Tackacoder\Tournament\Services;
 
+use Closure;
+
 class Service
 {
     /**
@@ -26,13 +28,13 @@ class Service
         return $this;
     }
 
-    public function getConfig(string $key): mixed
+    public function getConfig(string $key, $default = null): mixed
     {
         if (isset($this->config[$key])) {
             return $this->config[$key];
         }
 
-        return null;
+        return $default;
     }
 
     public function getName(): string
@@ -40,15 +42,16 @@ class Service
         return $this->name;
     }
 
-    public function getCallable()
+    public function getCallable(): ?Closure
     {
         return $this->callable;
     }
 
     /**
-     * 
+     * Call a closure function with args
+     * It can be used for event Listener packages
      */
-    protected function event($args)
+    protected function event(array $args): void
     {
         if (is_callable($this->getCallable())) {
             call_user_func($this->getCallable(), $args);

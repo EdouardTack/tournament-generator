@@ -39,7 +39,8 @@
         "test": "@php ./vendor/bin/pest",
         "test-dirty": "@php ./vendor/bin/pest --dirty",
         "test-coverage": "@php ./vendor/bin/pest --coverage",
-        "rector": "@php ./vendor/bin/rector --dry-run",
+        "rector": "@php ./vendor/bin/rector",
+        "rector-dry": "@php ./vendor/bin/rector --dry-run",
         "phpstan": "@php ./vendor/bin/phpstan"
     }
 }

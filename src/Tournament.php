@@ -41,7 +41,7 @@ class Tournament
     /**
      * Generate the Service generator method
      */
-    public function generate(bool $hasArray = false): array
+    public function generate(array $config = [], bool $hasArray = false): array
     {
         $service = $this->services->find(['name' => $this->mode]);
 
@@ -57,7 +57,7 @@ class Tournament
                 "name" => $this->getName(),
                 "date" => $this->getDate(),
                 "teams" => $this->teams,
-            ])
+            ] + $config)
         ];
 
         return $hasArray ? SerializerEncoder::toArray($result) : $result;

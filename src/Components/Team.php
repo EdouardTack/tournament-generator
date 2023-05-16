@@ -18,12 +18,12 @@ class Team
             throw new Exception("Team name must be string data !");
         }
 
-        if (!is_bool($team['status'])) {
+        if (isset($team['status']) && !is_bool($team['status'])) {
             throw new Exception("Team status must be boolean data !");
         }
 
         $this->name = $team['name'];
-        $this->status = $team['status'];
+        $this->status = $team['status'] ?? false;
 
         $this->uuid = (isset($team['uuid']) && is_string($team['uuid'])) ? $team['uuid'] : substr(bin2hex(random_bytes(6)), 0, 16);
     }

@@ -70,7 +70,7 @@ class ChampionshipService extends Service implements ServiceInterface
      */
     public function generate(array $config): array
     {
-        $this->setConfig($config);
+        $this->setConfig($config + ['mirror' => false, 'shift' => 3]);
 
         $this->date = $this->getConfig('date');
         $date = $this->date->add(CarbonInterval::make('1 Day'));
@@ -85,18 +85,22 @@ class ChampionshipService extends Service implements ServiceInterface
         }
         $this->event(['name' => 'generate:afterSetContests']);
 
-        return $this->contests->toArray();
+        return $this->getContests()->toArray();
     }
 
+    /**
+     * Create Schedule days with date intervalled
+     * Return the last intervel date
+     */
     public function matches(array $contests, $intervalDate, $idDay)
     {
-        $day = new Day("Journey n°$idDay");
+        $day = new Day("Day number $idDay");
         $intervalDate = $intervalDate->add(CarbonInterval::make($this->interval));
         $day->addSchedule(new Schedule(
             $intervalDate,
             $contests
         ));
-        $this->contests->add($day);
+        $this->getContests()->add($day);
         $this->event(['name' => 'contests:createSchedule', 'day' => $day]);
 
         return $intervalDate;
@@ -170,6 +174,28 @@ class ChampionshipService extends Service implements ServiceInterface
                 }
             }
         }
+        $this->event(['name' => 'rounds:homeRounds', 'homeRounds' => $rounds]);
+
+        // Mirror flip
+        if ($this->getConfig('mirror') === true) {
+            $awayRounds = [];
+            $shiftDefault = $this->getConfig('shift', 3);
+            $totalRounds = count($rounds);
+            $shift = ($totalRounds + $shiftDefault);
+            for ($i = $shiftDefault;$i < $shift;$i++) {
+                if ($i == $totalRounds) {
+                    $i = 0;
+                    $shift = $shiftDefault;
+                }
+    
+                $awayRounds[$i] = [];
+                foreach ($rounds[$i] as $key => $round) {
+                    $awayRounds[$i][$key] = $this->flip($round);
+                }
+            }
+            $this->event(['name' => 'rounds:awayRounds', 'awayRounds' => $awayRounds]);
+            $rounds = array_merge($rounds, $awayRounds);
+        }
 
         $this->event(['name' => 'rounds:roundsCreated', 'rounds' => $rounds]);
 
@@ -179,6 +205,11 @@ class ChampionshipService extends Service implements ServiceInterface
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getContests(): ContestsCollection
+    {
+        return $this->contests;
     }
 
     /**

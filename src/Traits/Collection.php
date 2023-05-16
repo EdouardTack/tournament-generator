@@ -2,6 +2,9 @@
 
 namespace Tackacoder\Tournament\Traits;
 
+/**
+ * @todo implement https://www.php.net/manual/en/class.iterator.php ?!
+ */
 trait Collection
 {
     /**
