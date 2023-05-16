@@ -2,7 +2,7 @@
 
 ## Features
 
-- Create a simple round robin tournament with an even count teams
+- Create a simple round robin tournament with an even count teams and home/away matches
 
 ## Installation
 
@@ -13,6 +13,7 @@
 ```php
 require './vendor/autoload.php';
 
+use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Tournament;
 
 /**
@@ -69,9 +70,42 @@ $tournament->setTeams([
         "status" => true
     ]
 ]);
+// Change the start date
+$tournament->setDate(date: CarbonImmutable::now('UTC'));
+
 $tournament->addService(new ChampionshipService());
 $result = $tournament->generate();
 ```
+
+### Championship Service Usage
+
+The Championship Service object can be construct with optionals parameters.
+    * interval : See [documentation](https://carbon.nesbot.com/docs/#api-interval)
+    * callable : Closure to send event on diffrent endpoint
+
+```php
+new ChampionshipService('2 days', function ($args) {
+    $endpoint = $args['name'];
+    event(new Event($args));
+});
+```
+
+On generate method, yon can add some configuration parameters to send to Services. For `ChampionshipService`, you can add mirror and shift configuration.
+
+```php
+
+[...]
+
+$tournament->generate([
+    'mirror' => false, // false => each Teams meet once, true => home & away matches
+    'shift' => 3 // Shift as many matches to avoid meeting teams on the same model
+]);
+```
+
+The default configuration parameters to `generate()` are :
+    * The name of the tournament
+    * The date of creation
+    * Teams collection
 
 ### Create a generator service
 
@@ -90,16 +124,16 @@ class MyServiceService extends Service implements ServiceInterface
     {
         $this->setConfig($config);
 
-        $this->getConfig('date');
-        $this->getConfig('teams');
-        $this->getConfig('name');
-        $this->getConfig('mode');
+        $date = $this->getConfig('date');
+        $teams = $this->getConfig('teams');
+        $name = $this->getConfig('name');
 
         return [];
     }
 }
 
 // In other file
+$tournament = new Tournament();
 $tournament->setMode('my_service');
 ```
 

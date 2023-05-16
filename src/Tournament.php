@@ -6,7 +6,7 @@ use Carbon\CarbonImmutable;
 use Tackacoder\Tournament\Collections\ServicesCollection;
 use Tackacoder\Tournament\Collections\TeamsCollection;
 use Tackacoder\Tournament\Helpers\SerializerEncoder;
-use Tackacoder\Tournament\Services\ChampionshipService;
+// use Tackacoder\Tournament\Services\ChampionshipService;
 use Tackacoder\Tournament\Supports\ServiceInterface;
 
 class Tournament
@@ -31,7 +31,7 @@ class Tournament
      */
     public function __construct(protected string $name, protected string $mode = 'championship', string $utc = 'UTC')
     {
-        $this->date = CarbonImmutable::now()->setTimezone($utc);
+        $this->setDate(utc: $utc);
         $this->services = new ServicesCollection();
         // Do we include this service by default ?
         // $this->addService(new ChampionshipService());
@@ -95,6 +95,22 @@ class Tournament
     public function getTeams(): TeamsCollection
     {
         return $this->teams;
+    }
+
+    /**
+     * Create a default date if none pass
+     * It's today at 20:00:00
+     */
+    public function setDate(CarbonImmutable $date = null, string $utc = 'UTC'): Tournament
+    {
+        if (!is_null($date)) {
+            $this->date = $date;
+        } else {
+            $now = CarbonImmutable::now();
+            $this->date = CarbonImmutable::create($now->format('Y'), $now->format('m'), $now->format('d'), 20, 0, 0, $utc);
+        }
+
+        return $this;
     }
 
     public function getDate(): CarbonImmutable
