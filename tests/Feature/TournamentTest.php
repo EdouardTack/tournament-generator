@@ -94,3 +94,15 @@ it('can define or add some teams', function () {
     expect($this->tournament->getTeams()->toArray())
         ->toHaveCount(5);
 });
+
+it ('can set date', function () {
+    $this->tournament->setDate(utc: 'Europe/Paris');
+    expect($this->tournament->getDate())
+        ->toBeInstanceOf(CarbonImmutable::class);
+    expect($this->tournament->getDate()->toDateTimeString())->toBe(date('Y-m-d 20:00:00'));
+
+    $this->tournament->setDate(CarbonImmutable::now());
+    expect($this->tournament->getDate())
+        ->toBeInstanceOf(CarbonImmutable::class);
+    expect($this->tournament->getDate()->toDateTimeString())->toBe(date('Y-m-d H:i:s'));
+});
