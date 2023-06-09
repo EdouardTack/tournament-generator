@@ -6,6 +6,8 @@ use Exception;
 
 class Team
 {
+    protected ?int $id;
+
     protected string $uuid;
     
     protected string $name;
@@ -25,7 +27,13 @@ class Team
         $this->name = $team['name'];
         $this->status = $team['status'] ?? false;
 
+        $this->id = (isset($team['id']) && is_int($team['id'])) ? (int) $team['id'] :  null;
         $this->uuid = (isset($team['uuid']) && is_string($team['uuid'])) ? $team['uuid'] : substr(bin2hex(random_bytes(6)), 0, 16);
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function getUuid(): string

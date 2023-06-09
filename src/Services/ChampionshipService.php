@@ -70,7 +70,7 @@ class ChampionshipService extends Service implements ServiceInterface
      */
     public function generate(array $config): array
     {
-        $this->setConfig($config + ['mirror' => false, 'shift' => 3]);
+        $this->setConfig($config + ['mirror' => false, 'shift' => 3, 'shuffle' => false]);
 
         $this->date = $this->getConfig('date');
         $date = $this->date->add(CarbonInterval::make('1 Day'));
@@ -112,6 +112,9 @@ class ChampionshipService extends Service implements ServiceInterface
     public function rounds(): array
     {
         $teamsId = $this->getConfig('teams')->map(fn (Team $team) => $team->getUuid());
+        if ($this->getConfig('shuffle') == true) {
+            shuffle($teamsId);
+        }
         $countTeams = $this->getConfig('teams')->count();
 
         // If the team number is not an even number
@@ -136,13 +139,12 @@ class ChampionshipService extends Service implements ServiceInterface
             for ($match = 0;$match < $matchesPerRound;$match++) {
                 $home = ($round + $match) % $totalRounds;
                 $away = ($totalRounds - $match + $round) % $totalRounds;
-                // Last team remains in the same place, the others revolve around it
                 if ($match == 0) {
                     $away = $countTeams - 1;
                 }
                 $rounds[$round][$match] = new Contest(
-                    $this->getConfig('teams')->find(['uuid' => $this->teamName($home + 1, $teamsId)]),
-                    $this->getConfig('teams')->find(['uuid' => $this->teamName($away + 1, $teamsId)])
+                    $this->getConfig('teams')->find(['uuid' => $this->teamName($home, $teamsId)]),
+                    $this->getConfig('teams')->find(['uuid' => $this->teamName($away, $teamsId)])
                 );
             }
         }
@@ -166,20 +168,12 @@ class ChampionshipService extends Service implements ServiceInterface
                 $rounds[$round][0] = $this->flip($rounds[$round][0]);
             }
         }
-
-        foreach ($rounds as $match => $matches) {
-            foreach ($matches as $key => $round) {
-                if (random_int(0, 2) == 1) {
-                    $rounds[$match][$key] = $this->flip($round);
-                }
-            }
-        }
         $this->event(['name' => 'rounds:homeRounds', 'homeRounds' => $rounds]);
 
         // Mirror flip
         if ($this->getConfig('mirror') === true) {
             $awayRounds = [];
-            $shiftDefault = $this->getConfig('shift', 3);
+            $shiftDefault = $this->getConfig('shift');
             $totalRounds = count($rounds);
             $shift = ($totalRounds + $shiftDefault);
             for ($i = $shiftDefault;$i < $shift;$i++) {
@@ -228,9 +222,8 @@ class ChampionshipService extends Service implements ServiceInterface
      */
     protected function teamName(int $num, array $ids): string|int
     {
-        $i = $num - 1;
-        if (count($ids) > $i && strlen(trim((string) $ids[$i])) > 0) {
-            return trim((string) $ids[$i]);
+        if (count($ids) > $num && strlen(trim((string) $ids[$num])) > 0) {
+            return trim((string) $ids[$num]);
         } else {
             return $num;
         }

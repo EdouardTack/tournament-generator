@@ -13,6 +13,7 @@ beforeEach(function () {
     $this->teamsCollection = new TeamsCollection();
     for ($i = 1;$i <= 8;$i++) {
         $this->teamsCollection->add([
+            "id" => $i,
             "name" => "Team $i"
         ]);
     }
@@ -105,6 +106,34 @@ it('generate mirrors matches with shift of 4', function () {
         $rounds[8][0]->getAwayTeam()->getUuid(),
         $rounds[8][0]->getHomeTeam()->getUuid()
     ]);
+});
+
+test('gap for one team between home and away', function () {
+    $this->myChampionShipService->setConfig([
+        "name" => 'My championship with home/away matches',
+        "date" => $this->date,
+        "teams" => $this->teamsCollection,
+        "mirror" => true,
+        "shuffle" => false,
+        "shift" => 4
+    ]);
+    $rounds = $this->myChampionShipService->rounds();
+    
+    $gap = [];
+    foreach ($rounds as $contests) {
+        foreach($contests as $contest) {
+            if ($contest->getHomeTeam()->getId() == 1) {
+                $gap[] = "1";
+            }
+
+            if ($contest->getAwayTeam()->getId() == 1) {
+                $gap[] = "0";
+            }
+        }
+    }
+
+    expect(implode('', $gap) == "11010101010010")
+        ->toBeTrue();
 });
 
 test('object Day after rounds creation', function () {
