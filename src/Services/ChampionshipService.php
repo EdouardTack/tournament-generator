@@ -119,11 +119,11 @@ class ChampionshipService extends Service implements ServiceInterface
 
         // If the team number is not an even number
         $ghost = false;
-        // if ($countTeams % 2 == 1) {
-        //     $countTeams++;
-        //     $ghost = true;
-        // }
-        
+        if ($countTeams % 2 == 1) {
+            $countTeams++;
+            $ghost = true;
+        }
+
         $totalRounds = $countTeams - 1;
         $matchesPerRound = $countTeams / 2;
 
@@ -142,10 +142,12 @@ class ChampionshipService extends Service implements ServiceInterface
                 if ($match == 0) {
                     $away = $countTeams - 1;
                 }
-                $rounds[$round][$match] = new Contest(
-                    $this->getConfig('teams')->find(['uuid' => $this->teamName($home, $teamsId)]),
-                    $this->getConfig('teams')->find(['uuid' => $this->teamName($away, $teamsId)])
-                );
+                if ($this->teamName($home, $teamsId) && $this->teamName($away, $teamsId)) {
+                    $rounds[$round][($ghost ? $match - 1 : $match)] = new Contest(
+                        $this->getConfig('teams')->find(['uuid' => $this->teamName($home, $teamsId)]),
+                        $this->getConfig('teams')->find(['uuid' => $this->teamName($away, $teamsId)])
+                    );
+                }
             }
         }
 
@@ -209,23 +211,23 @@ class ChampionshipService extends Service implements ServiceInterface
     /**
      * Flip the 2 Team object
      */
-    protected function flip(Contest $round): Contest
+    protected function flip(Contest $contest): Contest
     {
         return new Contest(
-            $round->getAwayTeam(),
-            $round->getHomeTeam()
+            $contest->getAwayTeam(),
+            $contest->getHomeTeam()
         );
     }
 
     /**
      * Try to get the uuid of Team
      */
-    protected function teamName(int $num, array $ids): string|int
+    protected function teamName(int $num, array $ids): string|int|null
     {
         if (count($ids) > $num && strlen(trim((string) $ids[$num])) > 0) {
             return trim((string) $ids[$num]);
-        } else {
-            return $num;
         }
+        
+        return null;
     }
 }

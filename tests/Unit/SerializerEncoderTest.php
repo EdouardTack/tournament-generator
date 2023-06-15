@@ -31,11 +31,13 @@ it('transform object into array', function () {
             "contests" => [
                 [
                     "homeTeam" => [
+                        "id" => null,
                         "uuid" => "pr6slor",
                         "name" => "Team Home",
                         "status" => false
                     ],
                     "awayTeam" => [
+                        "id" => null,
                         "uuid" => "e5f4erg894",
                         "name" => "Team Away",
                         "status" => false

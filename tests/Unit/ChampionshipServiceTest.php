@@ -136,6 +136,30 @@ test('gap for one team between home and away', function () {
         ->toBeTrue();
 });
 
+test('Championship with odd teams', function () {
+    $teamsCollection = new TeamsCollection();
+    for ($i = 1;$i <= 5;$i++) {
+        $teamsCollection->add([
+            "id" => $i,
+            "name" => "Team $i"
+        ]);
+    }
+
+    $this->myChampionShipService->setConfig([
+        "name" => 'My championship with home/away matches',
+        "date" => $this->date,
+        "teams" => $teamsCollection,
+        "mirror" => true,
+        "shuffle" => false,
+        "shift" => 4
+    ]);
+    $rounds = $this->myChampionShipService->rounds();
+
+    foreach ($rounds as $contests) {
+        expect(count($contests))->toBe(2);
+    }
+});
+
 test('object Day after rounds creation', function () {
     $this->myChampionShipService->setConfig([
         "name" => 'Test Day object',
